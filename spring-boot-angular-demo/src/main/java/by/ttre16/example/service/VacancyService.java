@@ -2,7 +2,7 @@ package by.ttre16.example.service;
 
 import by.ttre16.example.domain.Vacancy;
 import by.ttre16.example.dto.VacancyDto;
-import by.ttre16.example.service.strategy.Strategy;
+import by.ttre16.example.service.strategy.AbstractStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,17 +14,17 @@ import java.util.List;
 @Slf4j
 public class VacancyService {
 
-    private StrategyProvider strategyProvider;
+    private StrategyProvider provider;
 
     @Autowired
-    public VacancyService(StrategyProvider strategyProvider) {
-        this.strategyProvider = strategyProvider;
+    public VacancyService(StrategyProvider provider) {
+        this.provider = provider;
     }
 
     public List<Vacancy> getVacancies(VacancyDto vacancyDto){
 
         String website = vacancyDto.getSiteName();
-        Strategy strategy = strategyProvider.getStrategy(website);
+        AbstractStrategy strategy = provider.getStrategy(website);
         strategy.setVacancyDto(vacancyDto);
 
         List<Vacancy> vacancies = null;
