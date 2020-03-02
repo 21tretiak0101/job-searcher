@@ -6,8 +6,7 @@ import org.jsoup.select.Elements;
 
 public class TutbyStrategy extends AbstractStrategy {
 
-    protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=%sJunior+%s&page=%d";
-    protected final String BASE_URL = "https://jobs.tut.by";
+    protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=%s+Junior+%s&page=%d";
 
     @Override
     String getUrlTemplate() {
