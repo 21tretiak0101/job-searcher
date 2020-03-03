@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,7 @@ public class Vacancy {
     private String salary;
     private String city;
     private String companyName;
-    private String siteName;
     private String url;
+    private String  date;
 
 }
