@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,12 @@ public class VacancyService {
 
         String website = vacancyDto.getSiteName();
         AbstractStrategy strategy = provider.getStrategy(website);
+
+        if(strategy == null){
+            log.warn("{} website strategy doesn't exist", website);
+            return null;
+        }
+
         strategy.setVacancyDto(vacancyDto);
 
         List<Vacancy> vacancies = null;
