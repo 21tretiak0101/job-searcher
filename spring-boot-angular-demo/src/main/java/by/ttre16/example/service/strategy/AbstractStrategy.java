@@ -2,6 +2,7 @@ package by.ttre16.example.service.strategy;
 
 import by.ttre16.example.domain.Vacancy;
 import by.ttre16.example.dto.VacancyDto;
+import lombok.Setter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,13 +10,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractStrategy {
 
-    private static List<Vacancy> vacancies;
+    @Setter
     private VacancyDto vacancyDto;
-
+    private static List<Vacancy> vacancies;
 
     public List<Vacancy> getVacancies() throws IOException {
         vacancies = new ArrayList<>();
@@ -40,8 +42,6 @@ public abstract class AbstractStrategy {
         return connection.get();
     }
 
-
-
     private void putAllVacanciesFromPage(Elements template){
         for(Element vacancyDetails: template){
             if (!isCorrectVacancy(parseTitle(vacancyDetails))) continue;
@@ -58,11 +58,8 @@ public abstract class AbstractStrategy {
                 .city(parseCity(details))
                 .companyName(parseCompanyName(details))
                 .url(parseUrl(details))
+                .date(parseDate(details))
                 .build();
-    }
-
-    public void setVacancyDto(VacancyDto vacancyDto) {
-        this.vacancyDto = vacancyDto;
     }
 
     private boolean isCorrectVacancy(String vacancyTitle){
@@ -83,4 +80,5 @@ public abstract class AbstractStrategy {
 
     abstract Elements getPageVacancyTemplate(Document document);
 
+    abstract String parseDate(Element element);
 }

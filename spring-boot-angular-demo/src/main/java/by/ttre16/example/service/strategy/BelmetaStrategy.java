@@ -1,11 +1,25 @@
 package by.ttre16.example.service.strategy;
 
+import by.ttre16.example.service.strategy.dateformat.MyDateFormat;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BelmetaStrategy extends AbstractStrategy {
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
+@Slf4j
+public class BelmetaStrategy extends AbstractStrategy {
+    /**
+     * @params
+     * 1. %s - technology
+     * 2. %s - city
+     * 3. %s - page
+     */
     protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s&l=%s&page=%d";
     protected final String BASE_URL = "https://belmeta.com";
 
@@ -54,7 +68,6 @@ public class BelmetaStrategy extends AbstractStrategy {
                 .trim();
     }
 
-
     @Override
     protected String getUrlTemplate() {
         return URL_TEMPLATE;
@@ -64,4 +77,15 @@ public class BelmetaStrategy extends AbstractStrategy {
     protected Elements getPageVacancyTemplate(Document document) {
         return document.getElementsByClass("job no-logo");
     }
+
+    @Override
+    protected String parseDate(Element element) {
+        String date = element.getElementsByAttribute("data-value")
+                .first()
+                .attr("data-value")
+                .trim();
+
+        return MyDateFormat.getDate(date, "dd.MM.yyyy HH:mm:ss");
+    }
+
 }

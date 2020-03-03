@@ -1,20 +1,35 @@
 package by.ttre16.example.service.strategy;
 
+import by.ttre16.example.service.strategy.dateformat.MyDateFormat;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class TutbyStrategy extends AbstractStrategy {
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
+@Slf4j
+public class TutbyStrategy extends AbstractStrategy {
+    /**
+     * @params
+     * 1. %s - technology
+     * 2. %s - city
+     * 3. %s - page
+     */
     protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=%s+Junior+%s&page=%d";
 
     @Override
-    String getUrlTemplate() {
+    protected String getUrlTemplate() {
         return URL_TEMPLATE;
     }
 
     @Override
-    String parseTitle(Element element) {
+    protected String parseTitle(Element element) {
         return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
                 .first()
                 .text()
@@ -22,7 +37,7 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    String parseSalary(Element element) {
+    protected String parseSalary(Element element) {
         Element salaryElement = element
                 .getElementsByAttributeValue("data-qa","vacancy-serp__vacancy-compensation").first();
 
@@ -34,7 +49,7 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    String parseCity(Element element) {
+    protected String parseCity(Element element) {
         return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address")
                 .first()
                 .text()
@@ -42,7 +57,7 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    String parseCompanyName(Element element) {
+    protected String parseCompanyName(Element element) {
         return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer")
                 .first()
                 .text()
@@ -50,7 +65,7 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    String parseUrl(Element element) {
+    protected String parseUrl(Element element) {
         return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
                 .first()
                 .attr("href")
@@ -58,7 +73,16 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    Elements getPageVacancyTemplate(Document document) {
+    protected Elements getPageVacancyTemplate(Document document) {
         return document.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy");
+    }
+
+    @Override
+    protected String parseDate(Element element) {
+        String date = element.getElementsByClass("vacancy-serp-item__publication-date")
+                .first()
+                .text().trim();
+
+        return MyDateFormat.getDate(date, "dd MMMM");
     }
 }
