@@ -1,0 +1,99 @@
+<div class="container-fluid text-center mt-6" id="title">
+  <h2> JuniorDev.by - быстрый поиск вакансий для Junior-разработчиков в Беларуси</h2>
+</div>
+
+
+<div class="container-fluid mt-5">
+  <div class="col-12">
+    <form action="" (ngSubmit)="postForm()" [formGroup]="form">
+      <div class="form-group">
+
+        <label for="city">Выберите город:</label>
+        <select name="" id="city" class="form-control" formControlName="city">
+          <option value="mi">Минск</option>
+          <option value="gr">Гродно</option>
+          <option value="vi">Витебск</option>
+          <option value="go">Гомель</option>
+          <option value="mo">Могилёв</option>
+          <option value="br">Брест</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="technology">Выберите технологию:</label>
+        <select name="" id="technology" class="form-control" formControlName="technology">
+          <option value="ja">Java</option>
+          <option value="js">JavaScript</option>
+          <option value="ru">Ruby</option>
+          <option value="ph">PHP</option>
+          <option value="cs">C#</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="website">Выберите источник:</label>
+        <select name="" id="website" class="form-control" formControlName="website">
+          <option value="tb">Tut.by</option>
+          <option value="bc">Belmeta.com</option>
+        </select>
+      </div>
+
+      <button class="btn btn-info" id="found" type="submit">Найти вакансии</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="container h4 mt-3" id="result">Результаты поиска</div>
+
+<div  *ngFor="let v of vacancies  | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+  <div class="container">
+    <div class="card mt-4">
+      <img src="" alt="" class="card-img-top">
+      <div class="card-header">
+        {{v.companyName}}
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">
+          {{v.title}}
+        </h4>
+        <h6 class="card-subtitle text-muted mb-4">
+          <img [src]="'assets/img/officebuilding.png'" alt="" width="25" height="25" class="d-inline-block align-bottom">
+          {{v.city}}
+          <p class="mt-2">
+            <img [src]="'assets/img/cash.png'" alt="cash" width="25" height="25" class="d-inline-block align-bottom">
+            {{v.salary === null ? 'Не указана' : v.salary}}
+          </p>
+        </h6>
+        <p class="card-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti enim sapiente ab eum dolor optio commodi sunt rerum ipsum animi sed architecto quia alias ducimus delectus maxime, dolore natus nulla consequuntur excepturi fugiat deleniti. Illo dolor perferendis officiis consequatur amet dignissimos alias, aperiam, ducimus libero temporibus eum animi velit nemo.
+        </p>
+        <a href="{{v.vacancyURL}}" target="_blank" class="card-link">Узнать больше</a>
+      </div>
+      <div class="card-footer text-muted">
+        {{v.date}}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="container mt-3">
+
+<ngb-pagination
+  [(page)]="page"
+  [pageSize]="pageSize"
+  [collectionSize]="collectionSize"
+  (click)="getFocus()">
+</ngb-pagination>
+
+</div>
+
+
+
+
