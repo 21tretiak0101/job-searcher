@@ -2,37 +2,46 @@ package by.ttre16.example.controller;
 
 import by.ttre16.example.domain.Vacancy;
 import by.ttre16.example.dto.VacancyDto;
-import by.ttre16.example.service.Strategy;
-import by.ttre16.example.service.StrategyProvider;
 import by.ttre16.example.service.VacancyService;
-import jdk.internal.module.ServicesCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/vacancies")
+@CrossOrigin("http://localhost:4200")
 public class VacancyRestController {
 
     public VacancyService service;
 
     @Autowired
-    public VacancyRestController(VacancyService service, StrategyProvider provider) {
+    public VacancyRestController(VacancyService service) {
         this.service = service;
     }
 
-    @GetMapping()
+    @GetMapping("/{city}/{technology}/{website}")
     public ResponseEntity<List<Vacancy>> getVacancies(
-            @RequestBody VacancyDto vacancyDto){
+            @PathVariable String city,
+            @PathVariable String technology,
+            @PathVariable String website){
 
-        List<Vacancy> vacancies = service.getVacancies(vacancyDto);
 
-        return ResponseEntity.ok(vacancies);
+        VacancyDto vacancy = VacancyDto.builder()
+                .city(city)
+                .website(website)
+                .technology(technology)
+                .build();
+
+        System.out.println(vacancy);
+
+        List<Vacancy> vacancies = service.getVacancies(vacancy);
+        if (vacancies == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(vacancies, HttpStatus.OK);
     }
-
 }
+
