@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>by.ttre16.example</groupId>
-	<artifactId>spring-boot-angular-demo</artifactId>
+	<artifactId>spring-boot-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-angular-demo</name>
 	<description>Demo project for Spring Boot and Angular</description>
