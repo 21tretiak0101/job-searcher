@@ -1,26 +1,20 @@
 package by.ttre16.example.service.strategy;
 
-import by.ttre16.example.service.strategy.dateformat.MyDateFormat;
+import by.ttre16.example.service.dateformat.MyDateFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 @Slf4j
 public class BelmetaStrategy extends AbstractStrategy {
     /**
      * @params
-     * 1. %s - technology
-     * 2. %s - city
-     * 3. %s - page
+     * 1. Junior + %s + %s means that the parameter q consists of three values (Junior, city, technology)
+     *
+     * 2. %d - page number value
      */
-    protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s&l=%s&page=%d";
+    protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s+%s&page=%d";
     protected final String BASE_URL = "https://belmeta.com";
 
     @Override
@@ -37,13 +31,13 @@ public class BelmetaStrategy extends AbstractStrategy {
     protected String parseSalary(Element element) {
         Element salaryElement = element.getElementsByClass("job-data salary").first();
         if(salaryElement == null){
-            return "Зарплата не указана.";
+            return null;
         }
         return salaryElement.text().trim();
     }
 
     @Override
-    protected String parseCity(Element element) {
+    protected String parseAddress(Element element) {
         return element.getElementsByClass("job-data region")
                 .first()
                 .attr("title")
@@ -88,4 +82,11 @@ public class BelmetaStrategy extends AbstractStrategy {
         return MyDateFormat.getDate(date, "dd.MM.yyyy HH:mm:ss");
     }
 
+    @Override
+    protected String parseText(Element element) {
+        return element.getElementsByClass("desc")
+                .first()
+                .text()
+                .trim();
+    }
 }

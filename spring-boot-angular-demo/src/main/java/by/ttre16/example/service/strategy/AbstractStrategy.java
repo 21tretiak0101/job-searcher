@@ -1,7 +1,6 @@
 package by.ttre16.example.service.strategy;
 
-import by.ttre16.example.domain.Vacancy;
-import by.ttre16.example.dto.VacancyDto;
+import by.ttre16.example.model.Vacancy;
 import lombok.Setter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -10,14 +9,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractStrategy {
 
-    @Setter
-    private VacancyDto vacancyDto;
     private static List<Vacancy> vacancies;
+    @Setter
+    private String city;
+    @Setter
+    private String technology;
 
     public List<Vacancy> getVacancies() throws IOException {
         vacancies = new ArrayList<>();
@@ -33,8 +33,6 @@ public abstract class AbstractStrategy {
     }
 
     private Document getDocument(int pageNumber) throws IOException {
-        String technology = vacancyDto.getTechnology();
-        String city = vacancyDto.getCity();
         String UrlTemplate = getUrlTemplate();
 
         String pageURL = String.format(UrlTemplate, technology, city, pageNumber);
@@ -44,7 +42,8 @@ public abstract class AbstractStrategy {
 
     private void putAllVacanciesFromPage(Elements template){
         for(Element vacancyDetails: template){
-            if (!isCorrectVacancy(parseTitle(vacancyDetails))) continue;
+            if (!isCorrectVacancy(parseTitle(vacancyDetails)))
+                continue;
 
             Vacancy vacancy = buildVacancy(vacancyDetails);
             vacancies.add(vacancy);
@@ -55,16 +54,21 @@ public abstract class AbstractStrategy {
         return  Vacancy.builder()
                 .title(parseTitle(details))
                 .salary(parseSalary(details))
-                .city(parseCity(details))
+                .text(parseText(details))
+                .address(parseAddress(details))
                 .companyName(parseCompanyName(details))
-                .url(parseUrl(details))
+                .vacancyURL(parseUrl(details))
                 .date(parseDate(details))
                 .build();
     }
 
     private boolean isCorrectVacancy(String vacancyTitle){
-        return vacancyTitle.contains("Junior");
+        if(technology.equals(""))
+            return vacancyTitle.contains("Junior");
+
+        return vacancyTitle.contains("Junior") && vacancyTitle.contains(technology);
     }
+
 
     abstract String getUrlTemplate();
 
@@ -72,7 +76,9 @@ public abstract class AbstractStrategy {
 
     abstract String parseSalary(Element element);
 
-    abstract String parseCity(Element element);
+    abstract String parseText(Element details);
+
+    abstract String parseAddress(Element element);
 
     abstract String parseCompanyName(Element element);
 
@@ -81,4 +87,14 @@ public abstract class AbstractStrategy {
     abstract Elements getPageVacancyTemplate(Document document);
 
     abstract String parseDate(Element element);
+
+    //todo
+/*
+1. первым параметром нужно принимать стратегию
+2. сделать стратегию обязательным параметром
+ */
+
+
+
+
 }

@@ -1,27 +1,20 @@
 package by.ttre16.example.service.strategy;
 
-import by.ttre16.example.service.strategy.dateformat.MyDateFormat;
+import by.ttre16.example.service.dateformat.MyDateFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 @Slf4j
 public class TutbyStrategy extends AbstractStrategy {
     /**
      * @params
-     * 1. %s - technology
-     * 2. %s - city
-     * 3. %s - page
+     * 1. Junior + %s + %s means that the parameter q consists of three values (Junior, city, technology)
+     *
+     * 2. %d - page number value
      */
-    protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=%s+Junior+%s&page=%d";
+    protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=Junior+%s+%s&page=%d";
 
     @Override
     protected String getUrlTemplate() {
@@ -42,14 +35,14 @@ public class TutbyStrategy extends AbstractStrategy {
                 .getElementsByAttributeValue("data-qa","vacancy-serp__vacancy-compensation").first();
 
         if(salaryElement == null){
-            return "Зарплата не указана.";
+            return null;
         }
 
         return salaryElement.text().trim();
     }
 
     @Override
-    protected String parseCity(Element element) {
+    protected String parseAddress(Element element) {
         return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address")
                 .first()
                 .text()
@@ -84,5 +77,13 @@ public class TutbyStrategy extends AbstractStrategy {
                 .text().trim();
 
         return MyDateFormat.getDate(date, "dd MMMM");
+    }
+
+    @Override
+    protected String parseText(Element element) {
+        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy_snippet_requirement")
+                .first()
+                .text()
+                .trim();
     }
 }
