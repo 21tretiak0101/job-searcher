@@ -1,11 +1,10 @@
-package by.ttre16.example.domain;
+package by.ttre16.example.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -15,9 +14,10 @@ public class Vacancy {
 
     private String title;
     private String salary;
-    private String city;
+    private String text;
+    private String address;
     private String companyName;
-    private String url;
-    private String  date;
+    private String vacancyURL;
+    private String date;
 
 }
