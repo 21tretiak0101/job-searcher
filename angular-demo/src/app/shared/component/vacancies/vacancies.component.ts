@@ -1,7 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Vacancy, VacancyService} from "../../service/vacancy-service.service";
+import {Component, OnInit} from '@angular/core';
 import {NgAnimateScrollService} from "ng-animate-scroll";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+
+import {VacancyDTO, Vacancy} from '../../interfaces';
+import {VacancyService} from "../../service/vacancy-service.service";
 
 @Component({
   selector: 'app-vacancies',
@@ -12,10 +14,11 @@ export class VacanciesComponent implements OnInit {
 
   constructor(private service: VacancyService, private animate: NgAnimateScrollService) { }
 
-  vacancies: Vacancy[];
+  vacancies: Vacancy[] = [];
   page:number = 1;
   pageSize: number = 7;
   collectionSize: number;
+
 
   cities = {
     gr: "Гродно",
@@ -24,11 +27,6 @@ export class VacanciesComponent implements OnInit {
     go: 'Гомель',
     vi: 'Витебск',
     mo: 'Могилёв'
-  };
-
-  websites = {
-    tb: 'Tut.by',
-    bc: 'Belmeta.com'
   };
 
   technologies = {
@@ -44,12 +42,12 @@ export class VacanciesComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       city: new FormControl('mi'),
-      technology: new FormControl('ja'),
-      website: new FormControl('tb')
+      technology: new FormControl('ja', [Validators.required]),
+      website: new FormControl('belmeta')
     });
   }
 
-  getVacancies(vacancy) : void{
+  getVacancies(vacancy: VacancyDTO) : void {
     this.service.getVacancies(vacancy)
       .subscribe(response => {
         this.vacancies = response;
@@ -62,16 +60,16 @@ export class VacanciesComponent implements OnInit {
     this.animate.scrollToElement('result', 650);
   }
 
-  postForm() {
+  submit() {
     const city = this.form.get('city').value;
     const website = this.form.get('website').value;
     const technology = this.form.get('technology').value;
-    console.log(this.cities[city], this.websites[website], this.technologies[technology]);
 
-    const vacancy = {
+
+    const vacancy: VacancyDTO = {
       city: this.cities[city],
       technology: this.technologies[technology],
-      website: this.websites[website]
+      website
     };
 
     this.getVacancies(vacancy);
