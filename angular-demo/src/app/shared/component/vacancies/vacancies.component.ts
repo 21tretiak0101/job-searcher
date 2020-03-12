@@ -34,10 +34,23 @@ export class VacanciesComponent implements OnInit {
     js: 'JavaScript',
     go: 'Go',
     ru: 'Ruby',
-    ph: 'PHP'
+    ph: 'PHP',
+    ne: '.NET',
+    py: 'Python',
+    re: 'React',
+    no: 'Node.js'
+  };
+
+  websites = {
+    belmeta: 'Belmeta.com',
+    tutby: 'Tut.by'
   };
 
   form: FormGroup;
+
+  technologiesKeys = Object.keys(this.technologies);
+  citiesKeys = Object.keys(this.cities);
+  websitesKeys = Object.keys(this.websites);
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -45,6 +58,8 @@ export class VacanciesComponent implements OnInit {
       technology: new FormControl('ja', [Validators.required]),
       website: new FormControl('belmeta')
     });
+
+
   }
 
   getVacancies(vacancy: VacancyDTO) : void {

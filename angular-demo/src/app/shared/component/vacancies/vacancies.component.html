@@ -4,47 +4,44 @@
 
 
 <div class="container-fluid mt-5">
-  <div class="col-12">
-    <form action="" (ngSubmit)="submit()" [formGroup]="form">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-12 ">
+      <form action="" (ngSubmit)="submit()" [formGroup]="form">
 
-      <div class="form-group">
-        <label for="website">Выберите источник:</label>
-        <select name="" id="website" class="form-control" formControlName="website">
-          <option value="tutby">Tut.by</option>
-          <option value="belmeta">Belmeta.com</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="website">Выберите источник:</label>
+          <select name="" id="website" class="form-control" formControlName="website">
+            <option *ngFor="let key of websitesKeys" [value]="key">{{ websites[key] }}</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="city">Выберите город:</label>
-        <select name="" id="city" class="form-control" formControlName="city">
-          <option value="mi">Минск</option>
-          <option value="gr">Гродно</option>
-          <option value="vi">Витебск</option>
-          <option value="go">Гомель</option>
-          <option value="mo">Могилёв</option>
-          <option value="br">Брест</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="city">Выберите город:</label>
+          <select name="" id="city" class="form-control" formControlName="city">
+            <option *ngFor="let key of citiesKeys" [value]="key">{{ cities[key] }}</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="technology">Выберите технологию:</label>
-        <select name="" id="technology" class="form-control" formControlName="technology">
-          <option value="ja">Java</option>
-          <option value="js">JavaScript</option>
-          <option value="ru">Ruby</option>
-          <option value="ph">PHP</option>
-          <option value="cs">C#</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="technology">Выберите технологию:</label>
+          <select name="" id="technology" class="form-control" formControlName="technology">
+            <option *ngFor="let key of technologiesKeys" [value]="key">{{ technologies[key] }}</option>
+          </select>
+        </div>
 
-      <button class="btn btn-info" id="found" type="submit">Найти вакансии</button>
-    </form>
+        <button class="btn btn-info mt-2" id="found" type="submit">Найти вакансии</button>
+      </form>
+    </div>
   </div>
 </div>
 
+<div class="container h4 mt-5" id="result"
+     *ngIf="vacancies.length > 0 else findAgain"
+>Результаты поиска</div>
 
-<div class="container h4 mt-3" id="result">Результаты поиска</div>
+<ng-template #findAgain>
+  <div class="container h4 mt-5 text-center text-muted">По заданным данным ничего не найдено, попробуйте ещё раз</div>
+</ng-template>
 
 <div  *ngFor="let v of vacancies  | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
   <div class="container">
@@ -57,14 +54,14 @@
         <h4 class="card-title">
           {{ v.title }}
         </h4>
-        <h6 class="card-subtitle text-muted mb-4">
+        <div class="card-subtitle text-muted mb-4 h6">
           <img [src]="'assets/img/officebuilding.png'" alt="" width="25" height="25" class="d-inline-block align-bottom">
-          {{ v.city }}
+          {{ v.address }}
           <p class="mt-2">
             <img [src]="'assets/img/cash.png'" alt="cash" width="25" height="25" class="d-inline-block align-bottom">
             {{ v.salary === null ? 'Не указана' : v.salary }}
           </p>
-        </h6>
+        </div>
         <p class="card-text">
           {{ v.text }}
         </p>
@@ -77,12 +74,7 @@
   </div>
 </div>
 
-
-
-
-
 <div class="container mt-3">
-
   <ngb-pagination
     [(page)]="page"
     [pageSize]="pageSize"
@@ -90,7 +82,6 @@
     *ngIf="vacancies.length"
     (click)="getFocus()">
   </ngb-pagination>
-
 </div>
 
 
