@@ -2,7 +2,7 @@ export interface Vacancy {
   title: string;
   text: string;
   salary: string;
-  city: string;
+  address: string;
   companyName: string;
   vacancyURL: string;
   date: string;
