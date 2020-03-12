@@ -1,15 +1,10 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from '@angular/common/http';
 
-export interface Vacancy {
-  title: string;
-  salary: string;
-  city: string;
-  companyName: string;
-  vacancyURL: string;
-  date: string;
-}
+import {URL} from '../../../environments/environment';
+import {Vacancy, VacancyDTO} from '../interfaces';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +13,10 @@ export class VacancyService{
 
   constructor(private http: HttpClient) { }
 
-  URL: string = 'http://localhost:8080/api/vacancies';
+  getVacancies(vacancy: VacancyDTO): Observable<Vacancy[]>{
 
-  getVacancies({city, technology, website}): Observable<Vacancy[]>{
-
-    return this.http.get<Vacancy[]>(
-      `${this.URL}/${city}/${technology}/${website}`);
+    return this.http.get<Vacancy[]>(`${URL}/vacancies`, {
+        params: {...vacancy}
+      });
   }
 }
