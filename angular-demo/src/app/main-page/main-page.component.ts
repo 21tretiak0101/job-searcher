@@ -1,24 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {NgAnimateScrollService} from "ng-animate-scroll";
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-
-import {VacancyDTO, Vacancy} from '../../interfaces';
-import {VacancyService} from "../../service/vacancy-service.service";
+import { Component, OnInit } from '@angular/core';
+import {VacancyService} from '../service/vacancies.service';
+import {NgAnimateScrollService} from 'ng-animate-scroll';
+import {Vacancy, VacancyDTO} from '../interface/interfaces';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'app-vacancies',
-  templateUrl: './vacancies.component.html',
-  styleUrls: ['./vacancies.component.scss']
+  selector: 'app-main-page',
+  templateUrl: './main-page.component.html',
+  styleUrls: ['./main-page.component.scss']
 })
-export class VacanciesComponent implements OnInit {
-
-  constructor(private service: VacancyService, private animate: NgAnimateScrollService) { }
+export class MainPageComponent implements OnInit {
 
   vacancies: Vacancy[] = [];
-  page:number = 1;
+  page: number = 1;
   pageSize: number = 7;
   collectionSize: number;
-
 
   cities = {
     gr: "Гродно",
@@ -52,14 +48,14 @@ export class VacanciesComponent implements OnInit {
   citiesKeys = Object.keys(this.cities);
   websitesKeys = Object.keys(this.websites);
 
+  constructor(private service: VacancyService, private animate: NgAnimateScrollService) { }
+
   ngOnInit(): void {
     this.form = new FormGroup({
       city: new FormControl('mi'),
-      technology: new FormControl('ja', [Validators.required]),
+      technology: new FormControl('ja'),
       website: new FormControl('belmeta')
     });
-
-
   }
 
   getVacancies(vacancy: VacancyDTO) : void {
@@ -71,15 +67,14 @@ export class VacanciesComponent implements OnInit {
       })
   }
 
-  getFocus() {
-    this.animate.scrollToElement('result', 650);
+  scroll(id: string) {
+    this.animate.scrollToElement(id, 650);
   }
 
   submit() {
     const city = this.form.get('city').value;
     const website = this.form.get('website').value;
     const technology = this.form.get('technology').value;
-
 
     const vacancy: VacancyDTO = {
       city: this.cities[city],

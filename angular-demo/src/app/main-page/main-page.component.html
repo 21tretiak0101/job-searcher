@@ -1,5 +1,9 @@
-<div class="container-fluid text-center mt-6" id="title">
-  <h2> JuniorDev.by - быстрый поиск вакансий для Junior-разработчиков в Беларуси</h2>
+<div class="container text-center mt-5" id="title">
+  <div class="row">
+    <div class="col-12 h2">
+      JuniorDev.by - быстрый поиск вакансий для Junior-разработчиков в Беларуси
+    </div>
+  </div>
 </div>
 
 
@@ -22,20 +26,20 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="scr">
           <label for="technology">Выберите технологию:</label>
           <select name="" id="technology" class="form-control" formControlName="technology">
             <option *ngFor="let key of technologiesKeys" [value]="key">{{ technologies[key] }}</option>
           </select>
         </div>
 
-        <button class="btn btn-info mt-2" id="found" type="submit">Найти вакансии</button>
+        <button class="btn btn-info mt-2" type="submit" id="scrollHere">Найти вакансии</button>
       </form>
     </div>
   </div>
 </div>
 
-<div class="container h4 mt-5" id="result"
+<div class="container mt-5 h4" id="result"
      *ngIf="vacancies.length > 0 else findAgain"
 >Результаты поиска</div>
 
@@ -43,7 +47,7 @@
   <div class="container h4 mt-5 text-center text-muted">По заданным данным ничего не найдено, попробуйте ещё раз</div>
 </ng-template>
 
-<div  *ngFor="let v of vacancies  | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+<div  *ngFor="let v of vacancies  | slice: (page - 1) * pageSize : (page - 1) * pageSize + pageSize">
   <div class="container">
     <div class="card mt-4">
       <img src="" alt="" class="card-img-top">
@@ -74,16 +78,13 @@
   </div>
 </div>
 
-<div class="container mt-3">
+<div class="container mt-4">
   <ngb-pagination
     [(page)]="page"
     [pageSize]="pageSize"
     [collectionSize]="collectionSize"
     *ngIf="vacancies.length"
-    (click)="getFocus()">
+    (click)="scroll('result')">
   </ngb-pagination>
 </div>
-
-
-
 
