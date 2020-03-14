@@ -7,23 +7,27 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
 public abstract class AbstractStrategy {
 
     private static List<Vacancy> vacancies;
-    @Setter
     private String city;
-    @Setter
     private String technology;
 
     public List<Vacancy> getVacancies() throws IOException {
+        return getVacanciesFromAllPages();
+    }
+
+    private List<Vacancy>  getVacanciesFromAllPages() throws IOException {
         vacancies = new ArrayList<>();
 
         for (int pageNumber = 0; true; pageNumber++) {
-            Elements pageVacancies = getPageVacancyTemplate(getDocument(pageNumber));
+            Elements pageVacancies = getPageVacancies(getPage(pageNumber));
 
             if(pageVacancies.size() == 0)
                 return vacancies;
@@ -32,69 +36,53 @@ public abstract class AbstractStrategy {
         }
     }
 
-    private Document getDocument(int pageNumber) throws IOException {
-        String UrlTemplate = getUrlTemplate();
-
-        String pageURL = String.format(UrlTemplate, technology, city, pageNumber);
+    private Document getPage(int pageNumber) throws IOException {
+        String pageURL = String.format(getStrategyURL(), technology, city, pageNumber);
         Connection connection = Jsoup.connect(pageURL);
         return connection.get();
     }
 
-    private void putAllVacanciesFromPage(Elements template){
-        for(Element vacancyDetails: template){
-            if (!isCorrectVacancy(parseTitle(vacancyDetails)))
+    private void putAllVacanciesFromPage(Elements pageVacancies){
+        for(Element vacancy: pageVacancies){
+            if (!isCorrectVacancy(vacancy))
                 continue;
 
-            Vacancy vacancy = buildVacancy(vacancyDetails);
-            vacancies.add(vacancy);
+            vacancies.add(parseVacancy(vacancy));
         }
     }
 
-    private Vacancy buildVacancy(Element details){
+    private Vacancy parseVacancy(Element vacancy){
         return  Vacancy.builder()
-                .title(parseTitle(details))
-                .salary(parseSalary(details))
-                .text(parseText(details))
-                .address(parseAddress(details))
-                .companyName(parseCompanyName(details))
-                .vacancyURL(parseUrl(details))
-                .date(parseDate(details))
+                .title(parseVacancyTitle(vacancy))
+                .salary(parseVacancySalary(vacancy))
+                .text(parseVacancyText(vacancy))
+                .address(parseVacancyAddress(vacancy))
+                .companyName(parseVacancyCompanyName(vacancy))
+                .URL(parseVacancyUrl(vacancy))
+                .date(parseDate(vacancy))
                 .build();
     }
 
-    private boolean isCorrectVacancy(String vacancyTitle){
-        if(technology.equals(""))
-            return vacancyTitle.contains("Junior");
-
+    private boolean isCorrectVacancy(Element vacancy){
+        String vacancyTitle = parseVacancyTitle(vacancy);
         return vacancyTitle.contains("Junior") && vacancyTitle.contains(technology);
     }
 
+    abstract String getStrategyURL();
 
-    abstract String getUrlTemplate();
+    abstract String parseVacancyTitle(Element vacancy);
 
-    abstract String parseTitle(Element element);
+    abstract String parseVacancySalary(Element vacancy);
 
-    abstract String parseSalary(Element element);
+    abstract String parseVacancyText(Element vacancy);
 
-    abstract String parseText(Element details);
+    abstract String parseVacancyAddress(Element vacancy);
 
-    abstract String parseAddress(Element element);
+    abstract String parseVacancyCompanyName(Element vacancy);
 
-    abstract String parseCompanyName(Element element);
+    abstract String parseVacancyUrl(Element vacancy);
 
-    abstract String parseUrl(Element element);
+    abstract String parseDate(Element vacancy);
 
-    abstract Elements getPageVacancyTemplate(Document document);
-
-    abstract String parseDate(Element element);
-
-    //todo
-/*
-1. первым параметром нужно принимать стратегию
-2. сделать стратегию обязательным параметром
- */
-
-
-
-
+    abstract Elements getPageVacancies(Document page);
 }

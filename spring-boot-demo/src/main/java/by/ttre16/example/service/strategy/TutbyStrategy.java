@@ -16,63 +16,62 @@ public class TutbyStrategy extends AbstractStrategy {
      */
     protected final String URL_TEMPLATE = "https://jobs.tut.by/search/vacancy?text=Junior+%s+%s&page=%d";
 
+
     @Override
-    protected String getUrlTemplate() {
+    protected Elements getPageVacancies(Document page) {
+        return page.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy");
+    }
+
+    @Override
+    protected String getStrategyURL() {
         return URL_TEMPLATE;
     }
 
     @Override
-    protected String parseTitle(Element element) {
-        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
+    protected String parseVacancyTitle(Element vacancy) {
+        return vacancy.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
                 .first()
                 .text()
                 .trim();
     }
 
     @Override
-    protected String parseSalary(Element element) {
-        Element salaryElement = element
+    protected String parseVacancySalary(Element vacancy) {
+        Element salary = vacancy
                 .getElementsByAttributeValue("data-qa","vacancy-serp__vacancy-compensation").first();
 
-        if(salaryElement == null){
-            return null;
-        }
-
-        return salaryElement.text().trim();
+        return salary == null
+                ? null
+                : salary.text().trim();
     }
 
     @Override
-    protected String parseAddress(Element element) {
-        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address")
+    protected String parseVacancyAddress(Element vacancy) {
+        return vacancy.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-address")
                 .first()
                 .text()
                 .trim();
     }
 
     @Override
-    protected String parseCompanyName(Element element) {
-        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer")
+    protected String parseVacancyCompanyName(Element vacancy) {
+        return vacancy.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer")
                 .first()
                 .text()
                 .trim();
     }
 
     @Override
-    protected String parseUrl(Element element) {
-        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
+    protected String parseVacancyUrl(Element vacancy) {
+        return vacancy.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-title")
                 .first()
                 .attr("href")
                 .trim();
     }
 
     @Override
-    protected Elements getPageVacancyTemplate(Document document) {
-        return document.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy");
-    }
-
-    @Override
-    protected String parseDate(Element element) {
-        String date = element.getElementsByClass("vacancy-serp-item__publication-date")
+    protected String parseDate(Element vacancy) {
+        String date = vacancy.getElementsByClass("vacancy-serp-item__publication-date")
                 .first()
                 .text().trim();
 
@@ -80,8 +79,8 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseText(Element element) {
-        return element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy_snippet_requirement")
+    protected String parseVacancyText(Element vacancy) {
+        return vacancy.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy_snippet_requirement")
                 .first()
                 .text()
                 .trim();

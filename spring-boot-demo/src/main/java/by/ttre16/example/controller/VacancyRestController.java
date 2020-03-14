@@ -3,6 +3,7 @@ package by.ttre16.example.controller;
 import by.ttre16.example.model.Vacancy;
 import by.ttre16.example.service.VacancyService;
 import by.ttre16.example.service.VacancyServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

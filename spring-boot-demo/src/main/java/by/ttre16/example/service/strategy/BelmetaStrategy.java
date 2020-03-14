@@ -17,9 +17,20 @@ public class BelmetaStrategy extends AbstractStrategy {
     protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s+%s&page=%d";
     protected final String BASE_URL = "https://belmeta.com";
 
+
     @Override
-    protected String parseTitle(Element element) {
-        return element.getElementsByClass("title")
+    protected Elements getPageVacancies(Document page) {
+        return page.getElementsByClass("job no-logo");
+    }
+
+    @Override
+    protected String getStrategyURL() {
+        return URL_TEMPLATE;
+    }
+
+    @Override
+    protected String parseVacancyTitle(Element vacancy) {
+        return vacancy.getElementsByClass("title")
                 .first()
                 .getElementsByTag("a")
                 .first()
@@ -28,33 +39,32 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseSalary(Element element) {
-        Element salaryElement = element.getElementsByClass("job-data salary").first();
-        if(salaryElement == null){
-            return null;
-        }
-        return salaryElement.text().trim();
+    protected String parseVacancySalary(Element vacancy) {
+        Element salary = vacancy.getElementsByClass("job-data salary").first();
+        return salary == null
+                ? null
+                : salary.text().trim();
     }
 
     @Override
-    protected String parseAddress(Element element) {
-        return element.getElementsByClass("job-data region")
+    protected String parseVacancyAddress(Element vacancy) {
+        return vacancy.getElementsByClass("job-data region")
                 .first()
                 .attr("title")
                 .trim();
     }
 
     @Override
-    protected String parseCompanyName(Element element) {
-        return element.getElementsByClass("job-data company")
+    protected String parseVacancyCompanyName(Element vacancy) {
+        return vacancy.getElementsByClass("job-data company")
                 .first()
                 .text()
                 .trim();
     }
 
     @Override
-    protected String parseUrl(Element element) {
-        return BASE_URL + element.getElementsByClass("title")
+    protected String parseVacancyUrl(Element vacancy) {
+        return BASE_URL + vacancy.getElementsByClass("title")
                 .first()
                 .getElementsByTag("a")
                 .first()
@@ -63,18 +73,8 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String getUrlTemplate() {
-        return URL_TEMPLATE;
-    }
-
-    @Override
-    protected Elements getPageVacancyTemplate(Document document) {
-        return document.getElementsByClass("job no-logo");
-    }
-
-    @Override
-    protected String parseDate(Element element) {
-        String date = element.getElementsByAttribute("data-value")
+    protected String parseDate(Element vacancy) {
+        String date = vacancy.getElementsByAttribute("data-value")
                 .first()
                 .attr("data-value")
                 .trim();
@@ -83,8 +83,8 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseText(Element element) {
-        return element.getElementsByClass("desc")
+    protected String parseVacancyText(Element vacancy) {
+        return vacancy.getElementsByClass("desc")
                 .first()
                 .text()
                 .trim();
