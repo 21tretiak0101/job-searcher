@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
-import {URL} from '../../../environments/environment';
-import {Vacancy, VacancyDTO} from '../interfaces';
+import {URL} from '../../environments/environment';
+import {Vacancy, VacancyDTO} from '../interface/interfaces';
 
 
 @Injectable({
@@ -11,11 +11,13 @@ import {Vacancy, VacancyDTO} from '../interfaces';
 })
 export class VacancyService{
 
+  private GET_VACANCIES: string = `${URL}/vacancies`;
+
   constructor(private http: HttpClient) { }
 
   getVacancies(vacancy: VacancyDTO): Observable<Vacancy[]>{
 
-    return this.http.get<Vacancy[]>(`${URL}/vacancies`, {
+    return this.http.get<Vacancy[]>(this.GET_VACANCIES, {
         params: {...vacancy}
       });
   }

@@ -39,52 +39,51 @@
   </div>
 </div>
 
-<div class="container mt-5 h4" id="result"
-     *ngIf="vacancies.length > 0 else findAgain"
->Результаты поиска</div>
 
-<ng-template #findAgain>
-  <div class="container h4 mt-5 text-center text-muted">По заданным данным ничего не найдено, попробуйте ещё раз</div>
-</ng-template>
+<div class="container h4 mt-5 text-center text-muted" *ngIf="!vacancies.length && !loading">Ничего не найдено</div>
 
-<div  *ngFor="let v of vacancies  | slice: (page - 1) * pageSize : (page - 1) * pageSize + pageSize">
-  <div class="container">
-    <div class="card mt-4">
-      <img src="" alt="" class="card-img-top">
-      <div class="card-header">
-        {{ v.companyName }}
-      </div>
-      <div class="card-body">
-        <h4 class="card-title">
-          {{ v.title }}
-        </h4>
-        <div class="card-subtitle text-muted mb-4 h6">
-          <img [src]="'assets/img/officebuilding.png'" alt="" width="25" height="25" class="d-inline-block align-bottom">
-          {{ v.address }}
-          <p class="mt-2">
-            <img [src]="'assets/img/cash.png'" alt="cash" width="25" height="25" class="d-inline-block align-bottom">
-            {{ v.salary === null ? 'Не указана' : v.salary }}
-          </p>
+<div class="container h4 mt-5 text-center text-muted" *ngIf="loading">Загрузка данных ...</div>
+
+<div class="mt-5" id="result" *ngIf="vacancies.length && !loading">
+  <div class="container h4">Результаты поиска</div>
+
+  <div  *ngFor="let v of vacancies  | slice: (page - 1) * pageSize : (page - 1) * pageSize + pageSize">
+    <div class="container">
+      <div class="card mt-4">
+        <img src="" alt="" class="card-img-top">
+        <div class="card-header">
+          {{ v.companyName }}
         </div>
-        <p class="card-text">
-          {{ v.text }}
-        </p>
-        <a href="{{ v.vacancyURL }}" target="_blank" class="card-link">Узнать больше</a>
-      </div>
-      <div class="card-footer text-muted">
-        {{ v.date }}
+        <div class="card-body">
+          <h4 class="card-title">
+            {{ v.title }}
+          </h4>
+          <div class="card-subtitle text-muted mb-4 h6">
+            <img [src]="'assets/img/officebuilding.png'" alt="" width="25" height="25" class="d-inline-block align-bottom">
+            {{ v.address }}
+            <p class="mt-2">
+              <img [src]="'assets/img/cash.png'" alt="cash" width="25" height="25" class="d-inline-block align-bottom">
+              {{ v.salary === null ? 'Не указана' : v.salary }}
+            </p>
+          </div>
+          <p class="card-text">
+            {{ v.text }}
+          </p>
+          <a href="{{ v.vacancyURL }}" target="_blank" class="card-link">Узнать больше</a>
+        </div>
+        <div class="card-footer text-muted">
+          {{ v.date }}
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="container mt-4">
-  <ngb-pagination
-    [(page)]="page"
-    [pageSize]="pageSize"
-    [collectionSize]="collectionSize"
-    *ngIf="vacancies.length"
-    (click)="scroll('result')">
-  </ngb-pagination>
+  <div class="container mt-4">
+    <ngb-pagination
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="collectionSize"
+      (click)="scroll('result')">
+    </ngb-pagination>
+  </div>
 </div>
 

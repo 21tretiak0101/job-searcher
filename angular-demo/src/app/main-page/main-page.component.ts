@@ -15,6 +15,7 @@ export class MainPageComponent implements OnInit {
   page: number = 1;
   pageSize: number = 7;
   collectionSize: number;
+  loading = false;
 
   cities = {
     gr: "Гродно",
@@ -42,11 +43,11 @@ export class MainPageComponent implements OnInit {
     tutby: 'Tut.by'
   };
 
-  form: FormGroup;
-
   technologiesKeys = Object.keys(this.technologies);
   citiesKeys = Object.keys(this.cities);
   websitesKeys = Object.keys(this.websites);
+
+  form: FormGroup;
 
   constructor(private service: VacancyService, private animate: NgAnimateScrollService) { }
 
@@ -61,17 +62,25 @@ export class MainPageComponent implements OnInit {
   getVacancies(vacancy: VacancyDTO) : void {
     this.service.getVacancies(vacancy)
       .subscribe(response => {
-        this.vacancies = response;
-        this.collectionSize = this.vacancies.length;
-        console.log(response);
-      })
+          setTimeout(() => this.loading = false, 1000);
+          this.vacancies = response;
+          this.collectionSize = this.vacancies.length;
+          console.log(response);
+        },
+        error =>  {
+          console.error('Error: ' + error);
+          this.loading = false;
+        });
   }
+
 
   scroll(id: string) {
     this.animate.scrollToElement(id, 650);
   }
 
   submit() {
+    this.prepareRequest();
+
     const city = this.form.get('city').value;
     const website = this.form.get('website').value;
     const technology = this.form.get('technology').value;
@@ -83,5 +92,10 @@ export class MainPageComponent implements OnInit {
     };
 
     this.getVacancies(vacancy);
+  }
+
+  prepareRequest(): void {
+    this.loading = true;
+    this.page = 1;
   }
 }

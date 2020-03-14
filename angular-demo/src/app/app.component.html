@@ -1,33 +1,35 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
-  <a href="" class="navbar-brand ml-4">
-    <img [src] = "'assets/img/logo.png'" height="40" width="60" alt="">
-  </a>
+<header id="header">
+  <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <a routerLink="/vac" class="navbar-brand ml-4">
+      <img [src] = "'assets/img/logo.png'" height="40" width="60" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" routerLink="/main" routerLinkActive="active">Главная</a>
+          </li>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="#">Main</a>
-      <a class="nav-item nav-link" href="#">About</a>
-      <a class="nav-item nav-link" href="#">Questions</a>
-      <a class="nav-item nav-link" href="#">Contacts</a>
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" routerLink="/about" routerLinkActive="active">Описание</a>
+          </li>
+
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-item nav-link" routerLink="/contacts" routerLinkActive="active">Контакты</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
-
-
-
+  </nav>
+</header>
 
 <main id="main">
-  <div class="cont">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
 </main>
-
-
-
-<footer id="footer"></footer>
 
 
 
