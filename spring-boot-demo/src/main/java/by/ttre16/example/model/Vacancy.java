@@ -17,7 +17,7 @@ public class Vacancy {
     private String text;
     private String address;
     private String companyName;
-    private String URL;
+    private String url;
     private String date;
 
 }

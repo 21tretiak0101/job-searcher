@@ -23,7 +23,7 @@ public class TutbyStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String getStrategyURL() {
+    protected String getStrategyUrl() {
         return URL_TEMPLATE;
     }
 

@@ -37,7 +37,7 @@ public abstract class AbstractStrategy {
     }
 
     private Document getPage(int pageNumber) throws IOException {
-        String pageURL = String.format(getStrategyURL(), technology, city, pageNumber);
+        String pageURL = String.format(getStrategyUrl(), technology, city, pageNumber);
         Connection connection = Jsoup.connect(pageURL);
         return connection.get();
     }
@@ -58,7 +58,7 @@ public abstract class AbstractStrategy {
                 .text(parseVacancyText(vacancy))
                 .address(parseVacancyAddress(vacancy))
                 .companyName(parseVacancyCompanyName(vacancy))
-                .URL(parseVacancyUrl(vacancy))
+                .url(parseVacancyUrl(vacancy))
                 .date(parseDate(vacancy))
                 .build();
     }
@@ -68,7 +68,7 @@ public abstract class AbstractStrategy {
         return vacancyTitle.contains("Junior") && vacancyTitle.contains(technology);
     }
 
-    abstract String getStrategyURL();
+    abstract String getStrategyUrl();
 
     abstract String parseVacancyTitle(Element vacancy);
 
