@@ -1,6 +1,7 @@
 package by.ttre16.example.service.strategy;
 
 import by.ttre16.example.service.dateformat.MyDateFormat;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,6 +9,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 @Slf4j
+@NoArgsConstructor
 @Component
 public class TutbyStrategy extends AbstractStrategy {
     /**
