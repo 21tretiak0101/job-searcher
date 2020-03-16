@@ -3,6 +3,7 @@ import {VacancyService} from '../service/vacancies.service';
 import {NgAnimateScrollService} from 'ng-animate-scroll';
 import {Vacancy, VacancyDTO} from '../interface/interfaces';
 import {FormControl, FormGroup} from '@angular/forms';
+import {getErrorMessage} from 'codelyzer/templateAccessibilityElementsContentRule';
 
 @Component({
   selector: 'app-main-page',
@@ -65,10 +66,9 @@ export class MainPageComponent implements OnInit {
           setTimeout(() => this.loading = false, 1000);
           this.vacancies = response;
           this.collectionSize = this.vacancies.length;
-          console.log(response);
         },
         error =>  {
-          console.error('Error: ' + error);
+          console.error('Error:', error.error.message);
           this.loading = false;
         });
   }

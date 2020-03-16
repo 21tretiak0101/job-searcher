@@ -22,24 +22,13 @@ public class VacancyServiceImpl implements VacancyService{
     }
 
     @Override
-    public List<Vacancy> findVacancies(String website, String city, String technology) {
-
+    public List<Vacancy> findVacancies(String website, String city, String technology) throws IOException {
         AbstractStrategy strategy = provider.getStrategy(website);
-        if (strategy == null){
-            log.warn("{} website strategy doesn't exist", website);
-            return null;
-        }
+        if (strategy == null) return null;
 
-        try
-        {
-            strategy.setCity(city);
-            strategy.setTechnology(technology);
-            return strategy.getVacancies();
-        }
-        catch (IOException e) {
-            log.error("URL: connection not established with message {}", e.getMessage());
-            return null;
-        }
+        strategy.setCity(city);
+        strategy.setTechnology(technology);
+        return strategy.getVacancies();
     }
 }
 

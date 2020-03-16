@@ -30,7 +30,7 @@ public class MyDateFormat {
             return new SimpleDateFormat(MY_TEMPLATE, myDateFormatSymbols).format(localDate);
 
         } catch (ParseException e) {
-            log.warn("Date parsing exception with message: {}", e.getMessage());
+            log.warn("Date parsing exception: {}", e.getMessage());
         }
 
         return date;
