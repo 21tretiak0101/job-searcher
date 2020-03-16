@@ -66,6 +66,7 @@ export class MainPageComponent implements OnInit {
           setTimeout(() => this.loading = false, 1000);
           this.vacancies = response;
           this.collectionSize = this.vacancies.length;
+          console.log(response);
         },
         error =>  {
           console.error('Error:', error.error.message);

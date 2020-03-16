@@ -18,7 +18,7 @@ public class BelmetaStrategy extends AbstractStrategy {
      *
      * 2. %d - page number value
      */
-    protected final String URL_TEMPLATE = "https://beletetmeta.com/vacansii?q=Junior+%s+%s&page=%d";
+    protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s+%s&page=%d";
     protected final String BASE_URL = "https://belmeta.com";
 
 

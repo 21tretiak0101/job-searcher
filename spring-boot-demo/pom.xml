@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>by.ttre16.example</groupId>
 	<artifactId>spring-boot-demo</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<description>Demo project for Spring Boot and Angular</description>
 
 	<properties>
