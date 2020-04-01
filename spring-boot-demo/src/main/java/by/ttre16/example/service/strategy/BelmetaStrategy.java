@@ -1,26 +1,36 @@
 package by.ttre16.example.service.strategy;
 
-import by.ttre16.example.service.dateformat.MyDateFormat;
+import by.ttre16.example.service.util.MyDateFormat;
+import by.ttre16.example.service.util.UrlGenerator;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @NoArgsConstructor
 @Component
 public class BelmetaStrategy extends AbstractStrategy {
-    /**
-     * @params
-     * 1. Junior + %s + %s means that the parameter q consists of three values (Junior, city, technology)
-     *
-     * 2. %d - page number value
-     */
-    protected final String URL_TEMPLATE = "https://belmeta.com/vacansii?q=Junior+%s+%s&page=%d";
-    protected final String BASE_URL = "https://belmeta.com";
 
+    private final static String BELMETA_BASE_URL = "https://belmeta.com";
+    private final static String BELMETA_VACANCIES_GET = "vacansii";
+    private final static String FIRST_PARAM_PAGE = "page";
+    private final static String SECOND_PARAM_QUERY = "q";
+
+    @Override
+    protected String generatePageUrl(int pageNumber, Object... queryParams) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(BELMETA_BASE_URL)
+                .path(BELMETA_VACANCIES_GET)
+                .queryParam(FIRST_PARAM_PAGE, pageNumber);
+        UrlGenerator.queryString(builder, SECOND_PARAM_QUERY, queryParams);
+        String url = builder.build().toString();
+        log.info(url);
+        return url;
+    }
 
     @Override
     protected Elements getPageVacancies(Document page) {
@@ -28,12 +38,7 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String getStrategyUrl() {
-        return URL_TEMPLATE;
-    }
-
-    @Override
-    protected String parseVacancyTitle(Element vacancy) {
+    protected String parseTitle(Element vacancy) {
         return vacancy.getElementsByClass("title")
                 .first()
                 .getElementsByTag("a")
@@ -43,7 +48,7 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseVacancySalary(Element vacancy) {
+    protected String parseSalary(Element vacancy) {
         Element salary = vacancy.getElementsByClass("job-data salary").first();
         return salary == null
                 ? null
@@ -51,7 +56,7 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseVacancyAddress(Element vacancy) {
+    protected String parseAddress(Element vacancy) {
         return vacancy.getElementsByClass("job-data region")
                 .first()
                 .attr("title")
@@ -59,7 +64,7 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseVacancyCompanyName(Element vacancy) {
+    protected String parseCompanyName(Element vacancy) {
         return vacancy.getElementsByClass("job-data company")
                 .first()
                 .text()
@@ -67,8 +72,8 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseVacancyUrl(Element vacancy) {
-        return BASE_URL + vacancy.getElementsByClass("title")
+    protected String parseUrl(Element vacancy) {
+        return BELMETA_BASE_URL + vacancy.getElementsByClass("title")
                 .first()
                 .getElementsByTag("a")
                 .first()
@@ -87,7 +92,7 @@ public class BelmetaStrategy extends AbstractStrategy {
     }
 
     @Override
-    protected String parseVacancyText(Element vacancy) {
+    protected String parseDescription(Element vacancy) {
         return vacancy.getElementsByClass("desc")
                 .first()
                 .text()

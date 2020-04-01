@@ -1,6 +1,6 @@
 export interface Vacancy {
   title: string;
-  text: string;
+  description: string;
   salary: string;
   address: string;
   companyName: string;
